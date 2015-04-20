@@ -1,0 +1,32 @@
+
+    <form name="signup-form" id="signup-form">
+
+        <div class="form-group">
+          <label class="control-label" for="name">Name</label>
+          {{input class="form-control" type="text" value=name size="25" placeholder="Name"
+            autocomplete="name" required="required" autofocus="autofocus"}}
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="email">Email</label>
+          {{input class="form-control" type="email"  value=email size="25" placeholder="Email"
+            required="required" autocomplete="email"}}
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="password">Password</label>
+          {{input class="form-control" type="password" value=password size="25"
+            placeholder="Password" required="required" autocomplete="password" }}
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="password">Confirm Password</label>
+          {{input class="form-control" type="password" value=passwordConfirmation size="25"
+            placeholder="Confirm Password" required="required" autocomplete="passwordConfirmation" }}
+        </div>
+
+        <div class="form-submit">
+            <button class="btn btn-primary" type="submit" id="signup" {{action 'signup'}}>Sign up</button>
+
+        </div>
+        </form>
