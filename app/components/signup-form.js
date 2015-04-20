@@ -10,6 +10,7 @@ export default Ember.Component.extend({
     signup: function() {
       var properties = ['name', 'email', 'password', 'passwordConfirmation'];
       alert(properties.map(property => this.get(property)).join(', '));
+
     }
   }
 
