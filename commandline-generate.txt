@@ -1,3 +1,5 @@
 ember generate route signup --path "/"
 
 ember generate component signup-form
+
+ember generate controller signup

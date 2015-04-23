@@ -1,24 +1,78 @@
-<form class="form-horizontal" {{action "signup" on="submit"}} autocomplete="on">
-        <div class="form-group">
-          {{input class="form-control" type="text" value=name size="25" placeholder="Name"
-           required="required" autofocus="autofocus"}}
-        </div>
+<form {{action "signup" on="submit"}}>
+  {{input type="text"
+  value=name
+  name="name"
+  autocomplete="name"
 
-        <div class="form-group">
-            {{input class="form-control" type="email"  value=email size="25" placeholder="Email"
-              required="required"}}
-        </div>
+  autofocus="autofocus"
+  placeholder="Your name"}}
 
-        <div class="form-group">
-            {{input class="form-control" type="password" value=password size="25"
-              placeholder="Password" required="required" }}
-        </div>
+  {{input type="email"
+  value=email
+  name="email"
+  autocomplete="email"
 
-        <div class="form-group">
-            {{input class="form-control" type="password" value=passwordConfirmation size="25"
-              placeholder="Confirm Password" required="required" }}
-        </div>
+  placeholder="Your email address"}}
 
-        <button class="btn btn-primary" id="signup" type="submit" {{action 'signup' on="click"}}>Sign up</button>
+  {{input type="password"
+  value=password
+  name="password"
 
+  placeholder="Your password"}}
+
+  {{input type="password"
+  value=passwordConfirmation
+  name="passwordConfirmation"
+
+  placeholder="Confirm password"}}
+
+  {{input type="submit"
+  value="Sign up"}}
 </form>
+
+{{!--<form {{action "signup" on="submit"}}>--}}
+{{!--{{user-form submit="submit" }}--}}
+        {{!--<div class="form-group">--}}
+          {{!--{{input type="text"--}}
+          {{!--class="form-control"--}}
+          {{!--value=name--}}
+          {{!--name="name"--}}
+          {{!--autocomplete="name"--}}
+          {{!--required="required"--}}
+          {{!--autofocus="autofocus"--}}
+          {{!--placeholder="Your name"}}--}}
+        {{!--</div>--}}
+
+        {{!--<div class="form-group">--}}
+          {{!--{{input type="email"--}}
+          {{!--class="form-control"--}}
+          {{!--value=email--}}
+          {{!--name="email"--}}
+          {{!--autocomplete="email"--}}
+          {{!--required="required"--}}
+          {{!--placeholder="Your email address"}}--}}
+        {{!--</div>--}}
+
+        {{!--<div class="form-group">--}}
+          {{!--{{input type="password"--}}
+          {{!--class="form-control"--}}
+          {{!--value=password--}}
+          {{!--name="password"--}}
+          {{!--required="required"--}}
+          {{!--placeholder="Your password"}}--}}
+        {{!--</div>--}}
+
+        {{!--<div class="form-group">--}}
+          {{!--{{input type="password"--}}
+          {{!--class="form-control"--}}
+          {{!--value=passwordConfirmation--}}
+          {{!--name="passwordConfirmation"--}}
+          {{!--required="required"--}}
+          {{!--placeholder="Confirm password"}}--}}
+        {{!--</div>--}}
+
+        {{!--{{input type="submit" value="Sign up"}}--}}
+        {{!--<button class="btn btn-primary" type="submit">Sign up</button>--}}
+
+{{!--</form>--}}
+

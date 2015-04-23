@@ -4,19 +4,19 @@ body {
   margin-top: 40px;
 }
 
-/*input {*/
-  /*display: block;*/
-  /*height: 20px;*/
-  /*width: 200px;*/
-  /*margin-bottom: 5px;*/
-/*}*/
+input {
+  display: block;
+  height: 20px;
+  width: 200px;
+  margin-bottom: 5px;
+}
 
-/*input[type="submit"] {*/
-  /*height: 30px;*/
-  /*width: initial;*/
-  /*display: inline-block;*/
-  /*color: white;*/
-  /*background-color: #03c7d3;*/
-  /*border: 1px solid;*/
-  /*border-radius: 0;*/
-/*}*/
+input[type="submit"] {
+  height: 30px;
+  width: initial;
+  display: inline-block;
+  color: white;
+  background-color: #03c7d3;
+  border: 1px solid;
+  border-radius: 0;
+}
