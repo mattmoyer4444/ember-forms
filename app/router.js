@@ -10,4 +10,4 @@ Router.map(function() {
     path: '/'
   });
 });
-export default Router
+export default Router;

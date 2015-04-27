@@ -1,78 +1,136 @@
-<form {{action "signup" on="submit"}}>
+<script>
+    jQuery(function($) {
+        $('[data-numeric]').payment('restrictNumeric');
+        $('.cc-number').payment('formatCardNumber');
+        $('.cc-exp').payment('formatCardExpiry');
+        $('.cc-cvc').payment('formatCardCVC');
+        $.fn.toggleInputError = function(erred) {
+            this.parent('.form-group').toggleClass('has-error', erred);
+            return this;
+        };
+        $('form').submit(function(e) {
+            e.preventDefault();
+            var cardType = $.payment.cardType($('.cc-number').val());
+            $('.cc-number').toggleInputError(!$.payment.validateCardNumber($('.cc-number').val()));
+            $('.cc-exp').toggleInputError(!$.payment.validateCardExpiry($('.cc-exp').payment('cardExpiryVal')));
+            $('.cc-cvc').toggleInputError(!$.payment.validateCardCVC($('.cc-cvc').val(), cardType));
+            $('.cc-brand').text(cardType);
+            $('.validation').removeClass('text-danger text-success');
+            $('.validation').addClass($('.has-error').length ? 'text-danger' : 'text-success');
+        });
+    });
+</script>
+
+
+<form {{action "signup" on="submit"}} novalidate autocomplete="on">
+
   {{input type="text"
-  value=name
-  name="name"
-  autocomplete="name"
+      value=name
+      name="name"
+      autocomplete="name"
+      autofocus="autofocus"
+      placeholder="Your name"}}
 
-  autofocus="autofocus"
-  placeholder="Your name"}}
-
-  {{input type="email"
-  value=email
-  name="email"
-  autocomplete="email"
-
-  placeholder="Your email address"}}
+  {{input type="text"
+      value=email
+      name="email"
+      autocomplete="email"
+      placeholder="Your email address"}}
 
   {{input type="password"
-  value=password
-  name="password"
-
-  placeholder="Your password"}}
+      value=password
+      name="password"
+      placeholder="Your password"}}
 
   {{input type="password"
-  value=passwordConfirmation
-  name="passwordConfirmation"
+      value=passwordConfirmation
+      name="passwordConfirmation"
+      placeholder="Confirm password"}}
 
-  placeholder="Confirm password"}}
+{{!-- Credit card information--}}
+  {{input type="tel"
+      id="cc-number"
+      value=cardnumber
+      name="cardnumber"
+      autocomplete="cc-number"
+      placeholder="Your credit card number"
+      pattern="•••• •••• •••• ••••"
+      required="required"
+      data-nummeric="data-numeric"
+  }}
+
+  {{input type="tel"
+      id="cc-exp"
+      value=cardexp
+      name="cardexp"
+      autocomplete="cc-exp"
+      placeholder="Your credit card expiration •• / ••"
+      pattern="•• / ••"
+      required="required"
+  }}
+
+  {{input type="tel"
+      id="cc-cvc"
+      value=cardcvc
+      name="cardcvc"
+      autocomplete="off"
+      placeholder="Your credit card CVC •••"
+      pattern="•••"
+      required="required"
+      data-nummeric="data-numeric"
+  }}
 
   {{input type="submit"
-  value="Sign up"}}
+      value="Sign up"}}
+
+  {{#if error}}
+      <div class="error">{{error}}</div>
+  {{/if}}
 </form>
 
 {{!--<form {{action "signup" on="submit"}}>--}}
 {{!--{{user-form submit="submit" }}--}}
-        {{!--<div class="form-group">--}}
-          {{!--{{input type="text"--}}
-          {{!--class="form-control"--}}
-          {{!--value=name--}}
-          {{!--name="name"--}}
-          {{!--autocomplete="name"--}}
-          {{!--required="required"--}}
-          {{!--autofocus="autofocus"--}}
-          {{!--placeholder="Your name"}}--}}
-        {{!--</div>--}}
+{{!--<div class="form-group">--}}
+{{!--{{input type="text"--}}
+{{!--class="form-control"--}}
+{{!--value=name--}}
+{{!--name="name"--}}
+{{!--autocomplete="name"--}}
+{{!--required="required"--}}
+{{!--autofocus="autofocus"--}}
+{{!--placeholder="Your name"}}--}}
+{{!--</div>--}}
 
-        {{!--<div class="form-group">--}}
-          {{!--{{input type="email"--}}
-          {{!--class="form-control"--}}
-          {{!--value=email--}}
-          {{!--name="email"--}}
-          {{!--autocomplete="email"--}}
-          {{!--required="required"--}}
-          {{!--placeholder="Your email address"}}--}}
-        {{!--</div>--}}
+{{!--<div class="form-group">--}}
+{{!--{{input type="email"--}}
+{{!--class="form-control"--}}
+{{!--value=email--}}
+{{!--name="email"--}}
+{{!--autocomplete="email"--}}
+{{!--required="required"--}}
+{{!--placeholder="Your email address"}}--}}
+{{!--</div>--}}
 
-        {{!--<div class="form-group">--}}
-          {{!--{{input type="password"--}}
-          {{!--class="form-control"--}}
-          {{!--value=password--}}
-          {{!--name="password"--}}
-          {{!--required="required"--}}
-          {{!--placeholder="Your password"}}--}}
-        {{!--</div>--}}
+{{!--<div class="form-group">--}}
+{{!--{{input type="password"--}}
+{{!--class="form-control"--}}
+{{!--value=password--}}
+{{!--name="password"--}}
+{{!--required="required"--}}
+{{!--placeholder="Your password"}}--}}
+{{!--</div>--}}
 
-        {{!--<div class="form-group">--}}
-          {{!--{{input type="password"--}}
-          {{!--class="form-control"--}}
-          {{!--value=passwordConfirmation--}}
-          {{!--name="passwordConfirmation"--}}
-          {{!--required="required"--}}
-          {{!--placeholder="Confirm password"}}--}}
-        {{!--</div>--}}
+{{!--<div class="form-group">--}}
+{{!--{{input type="password"--}}
+{{!--class="form-control"--}}
+{{!--value=passwordConfirmation--}}
+{{!--name="passwordConfirmation"--}}
+{{!--required="required"--}}
+{{!--placeholder="Confirm password"}}--}}
+{{!--</div>--}}
 
-        {{!--{{input type="submit" value="Sign up"}}--}}
-        {{!--<button class="btn btn-primary" type="submit">Sign up</button>--}}
+{{!--{{input type="submit" value="Sign up"}}--}}
+{{!--<button class="btn btn-primary" type="submit">Sign up</button>--}}
 
 {{!--</form>--}}
 
