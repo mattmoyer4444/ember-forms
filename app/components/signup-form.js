@@ -44,7 +44,6 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
 
     signup: function () {
       if (this.validateForm()) {
-
         // define card data
         var ccData = {
           number: this.get('cardNumber'),
