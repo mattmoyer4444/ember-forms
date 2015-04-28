@@ -4,7 +4,7 @@ import jQuery from 'jquery';
 export default Base.extend({
   call: function() {
 
-    var expVal = String(this.model.get(this.property));
+    var expVal = this.model.get(this.property);
 
     if (jQuery.payment.validateCardExpiry(jQuery.payment.cardExpiryVal(expVal)) === false) {
 
