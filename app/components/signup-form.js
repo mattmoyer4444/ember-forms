@@ -41,25 +41,25 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
   },
 
   stripeResponseHandler: function(status, response) {
+    var status;
+    var response;
+
     if (response.error) {
       // Show the errors
       console.log(response.error.message);
     } else {
       console.log('In stripeResponseHandler')
       // response contains id and card, which contains additional card details
+      var token = response
 
-      //var token = response
-
-      //var token = this.get('response')
-      this.set('token', response);
+      //this.set('token', response);
       console.log(token);
-      this.sendAction('submit', this.get('token'));
+      this.sendAction('submit', token);
     }
   },
 
   actions: {
-
-    signup: function() {
+   signup: function() {
       if (this.validateForm()) {
 
         Stripe.card.createToken({
@@ -68,10 +68,7 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
           exp_month: jQuery.payment.cardExpiryVal(this.get('cardExpiry'))['month'],
           exp_year: jQuery.payment.cardExpiryVal(this.get('cardExpiry'))['year']
         }, this.stripeResponseHandler);
-
-
-
-      }
+     }
     }
   },
 
