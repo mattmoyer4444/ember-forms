@@ -11,7 +11,7 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
   cardExpiry: '',
   cardCVC: '',
 
-  validateForm: function() {
+  validateForm: function () {
     var firstInvalidField;
 
     if (this.get('errors.name.firstObject')) {
@@ -41,29 +41,32 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
   },
 
   actions: {
-   signup: function() {
+
+    signup: function () {
       if (this.validateForm()) {
 
-        Stripe.card.createToken({
+        // define card data
+        var ccData = {
           number: this.get('cardNumber'),
           cvc: this.get('cardCVC'),
           exp_month: jQuery.payment.cardExpiryVal(this.get('cardExpiry'))['month'],
           exp_year: jQuery.payment.cardExpiryVal(this.get('cardExpiry'))['year']
-        }, function stripeResponseHandler(status, response) {
+        };
 
-            if (response.error) {
-              // Show the errors
-              console.log(response.error.message);
-            } else {
-              console.log('In stripeResponseHandler')
-              // response contains id and card, which contains additional card details
-              var token = response
+        Stripe.card.createToken(ccData, this.stripeResponseHandler.bind(this));
+      }
+    }
+  },
 
-              console.log(token); // I now have a reference to the token
-              this.sendAction('submit', token); // send token to controller
-            }
-        });
-     }
+  stripeResponseHandler: function (status, response) {
+      if (response.error) {
+          // Show the errors
+          console.log(response.error.message);
+      } else {
+          // response contains id and card, which contains additional card details
+          var token = response;
+          //console.log('COMPONENT TOKEN: ' + token);
+          this.sendAction('submit', token);
     }
   },
 
