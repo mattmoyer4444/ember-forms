@@ -1,7 +1,8 @@
 import Ember from 'ember';
+import Stripe from 'stripe';
+import jQuery from 'jquery';
 import EmberValidations from 'ember-validations';
 import layout from '../templates/components/signup-form';
-
 
 export default Ember.Component.extend(EmberValidations.Mixin, {
   layout: layout,
@@ -39,15 +40,42 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
     }
   },
 
+  stripeResponseHandler: function(status, response) {
+    if (response.error) {
+      // Show the errors
+      console.log(response.error.message);
+    } else {
+      console.log('In stripeResponseHandler')
+      // response contains id and card, which contains additional card details
+
+      //var token = response
+
+      //var token = this.get('response')
+      this.set('token', response);
+      console.log(token);
+      this.sendAction('submit', this.get('token'));
+    }
+  },
+
   actions: {
+
     signup: function() {
       if (this.validateForm()) {
-        this.sendAction('submit', this.get('name'), this.get('email'), this.get('password'),
-                                  // Need to send this data to Stripe
-                                  this.get('cardNumber'), this.get('cardExpiry'), this.get('cardCVC'));
+
+        Stripe.card.createToken({
+          number: this.get('cardNumber'),
+          cvc: this.get('cardCVC'),
+          exp_month: jQuery.payment.cardExpiryVal(this.get('cardExpiry'))['month'],
+          exp_year: jQuery.payment.cardExpiryVal(this.get('cardExpiry'))['year']
+        }, this.stripeResponseHandler);
+
+
+
       }
     }
   },
+
+
 
   validations: {
     name: {
