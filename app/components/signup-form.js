@@ -65,8 +65,7 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
       } else {
           // response contains id and card, which contains additional card details
           var token = response;
-          //console.log('COMPONENT TOKEN: ' + token);
-          this.sendAction('submit', token);
+          this.sendAction('submit', token, this.get('name'), this.get('email'), this.get('password'));
     }
   },
 

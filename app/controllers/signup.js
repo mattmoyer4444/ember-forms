@@ -4,9 +4,9 @@ export default Ember.Controller.extend({
 
   actions: {
 
-    signup: function (token) {
+    signup: function (name, email, password, token) {
       //console.log('In CONTROLLER');
-      console.log('CONTROLLER TOKEN: ' + token);
+      alert([name, email, password, token].join(', '));
     }
   }
 
