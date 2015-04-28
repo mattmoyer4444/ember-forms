@@ -40,24 +40,6 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
     }
   },
 
-  stripeResponseHandler: function(status, response) {
-    var status;
-    var response;
-
-    if (response.error) {
-      // Show the errors
-      console.log(response.error.message);
-    } else {
-      console.log('In stripeResponseHandler')
-      // response contains id and card, which contains additional card details
-      var token = response
-
-      //this.set('token', response);
-      console.log(token);
-      this.sendAction('submit', token);
-    }
-  },
-
   actions: {
    signup: function() {
       if (this.validateForm()) {
@@ -67,12 +49,23 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
           cvc: this.get('cardCVC'),
           exp_month: jQuery.payment.cardExpiryVal(this.get('cardExpiry'))['month'],
           exp_year: jQuery.payment.cardExpiryVal(this.get('cardExpiry'))['year']
-        }, this.stripeResponseHandler);
+        }, function stripeResponseHandler(status, response) {
+
+            if (response.error) {
+              // Show the errors
+              console.log(response.error.message);
+            } else {
+              console.log('In stripeResponseHandler')
+              // response contains id and card, which contains additional card details
+              var token = response
+
+              console.log(token); // I now have a reference to the token
+              this.sendAction('submit', token); // send token to controller
+            }
+        });
      }
     }
   },
-
-
 
   validations: {
     name: {
