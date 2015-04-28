@@ -6,9 +6,9 @@ import layout from '../templates/components/signup-form';
 export default Ember.Component.extend(EmberValidations.Mixin, {
   layout: layout,
   error: '',
-  cardnumber: '',
-  cardexp: '',
-  cardcvc: '',
+  cardNumber: '',
+  cardExpiry: '',
+  cardCVC: '',
 
   validateForm: function() {
     var firstInvalidField;
@@ -21,12 +21,12 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
       firstInvalidField = 'password';
     } else if (this.get('errors.passwordConfirmation.firstObject')) {
       firstInvalidField = 'passwordConfirmation';
-    } else if (this.get('errors.cardnumber.firstObject')) {
-      firstInvalidField = 'cardnumber';
-    } else if (this.get('errors.cardexp.firstObject')) {
-      firstInvalidField = 'cardexp';
-    } else if (this.get('errors.cardcvc.firstObject')) {
-      firstInvalidField = 'cardcvc';
+    } else if (this.get('errors.cardNumber.firstObject')) {
+      firstInvalidField = 'cardNumber';
+    } else if (this.get('errors.cardExpiry.firstObject')) {
+      firstInvalidField = 'cardExpiry';
+    } else if (this.get('errors.cardCVC.firstObject')) {
+      firstInvalidField = 'cardCVC';
     }
 
     if (firstInvalidField) {
@@ -44,7 +44,7 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
       if (this.validateForm()) {
         this.sendAction('submit', this.get('name'), this.get('email'), this.get('password'),
                                   // Need to send this data to Stripe
-                                  this.get('cardnumber'), this.get('cardexp'), this.get('cardcvc'));
+                                  this.get('cardNumber'), this.get('cardExpiry'), this.get('cardCVC'));
       }
     }
   },
@@ -71,16 +71,16 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
       }
     },
 
-    cardnumber: {
-      cardnumber: {message: 'Your credit card number is invalid.'}
+    cardNumber: {
+      cardNumber: {message: 'Your credit card number is invalid.'}
     },
 
-    cardexp: {
-      cardexp: {message: 'Your credit card expiry date is invalid.'}
+    cardExpiry: {
+      cardExpiry: {message: 'Your credit card expiry date is invalid.'}
     },
 
-    cardcvc: {
-      cardcvc: {message: 'Your CVC code is invalid.'}
+    cardCVC: {
+      cardCVC: {message: 'Your CVC code is invalid.'}
     }
   }
 });
