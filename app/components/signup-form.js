@@ -39,39 +39,19 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
     }
   },
 
-  //stripeResponseHandler: function (status, response) {
-  //  if (response.error) {
-  //    // Show the errors
-  //    console.log(response.error.message);
-  //  } else {
-  //    // response contains id and card, which contains additional card details
-  //    var token = response;
-  //    console.log('In stripeResponseHandler');
-  //    console.log(this.token);
-  //    this.sendAction('submit', token, this.get('name'), this.get('email'), this.get('password'));
-  //    //this.sendAction('submit', token);
-  //
-  //  }
-  //},
+  stripeResponseHandler: function (status, response) {
+    if (response.error) {
+      // Show the errors
+      console.log(response.error.message);
+    } else {
+      // response contains id and card, which contains additional card details
+      var token = response;
+      this.sendAction('submit', token, this.get('name'), this.get('email'), this.get('password'));
+      //this.sendAction('submit', token);
 
-  createToken: function(ccData) {
-    Stripe.card.createToken(ccData, this.stripeResponseHandler);
+    }
   },
 
-  stripeResponseHandler: function(status, response) {
-    console.log('Status:'  + status);
-    console.log('Response: ' + response.id);
-      if (response.error) {
-        // Show the errors
-        console.log(response.error.message);
-      } else {
-        // response contains id and card, which contains additional card details
-        console.log('In stripeResponseHandler');
-
-        this.sendAction('submit', response, this.get('name'), this.get('email'), this.get('password'));
-        //this.sendAction('submit', token);
-      }
-  },
 
   actions: {
 
@@ -79,16 +59,17 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
 
       if (this.validateForm()) {
         // define card data
-       this.createToken({
+
+        Stripe.card.createToken({
           number: this.get('cardNumber'),
           cvc: this.get('cardCVC'),
           exp_month: jQuery.payment.cardExpiryVal(this.get('cardExpiry'))['month'],
           exp_year: jQuery.payment.cardExpiryVal(this.get('cardExpiry'))['year']
-        });
+        }, this.stripeResponseHandler.bind(this));
       }
-
     }
   },
+
 
   validations: {
     name: {
