@@ -4,9 +4,9 @@ export default Ember.Controller.extend({
 
   actions: {
 
-    signup: function (name, email, password, token) {
-      //console.log('In CONTROLLER');
-      alert([name, email, password, token].join(', '));
+    signup: function (name, email, password, stripeToken) {
+      console.log('In CONTROLLER');
+      alert([name, email, password, stripeToken].join(', '));
     }
   }
 
