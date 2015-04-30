@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import Stripe from 'stripe';
 import jQuery from 'jquery';
 import EmberValidations from 'ember-validations';
 import layout from '../templates/components/signup-form';
@@ -10,6 +9,7 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
   cardNumber: '',
   cardExpiry: '',
   cardCVC: '',
+  token: '',
 
   validateForm: function () {
     var firstInvalidField;
@@ -40,6 +40,7 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
     }
   },
 
+
   actions: {
 
     signup: function () {
@@ -54,19 +55,22 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
 
         Stripe.card.createToken(ccData, this.stripeResponseHandler.bind(this));
       }
+    },
+
+    stripeResponseHandler: function (status, response) {
+      if (response.error) {
+        // Show the errors
+        console.log(response.error.message);
+      } else {
+        // response contains id and card, which contains additional card details
+        var token = response.id;
+        //this.sendAction('submit', token, this.get('name'), this.get('email'), this.get('password'));
+        this.sendAction('submit', token);
+
+      }
     }
   },
 
-  stripeResponseHandler: function (status, response) {
-      if (response.error) {
-          // Show the errors
-          console.log(response.error.message);
-      } else {
-          // response contains id and card, which contains additional card details
-          var token = response;
-          this.sendAction('submit', token, this.get('name'), this.get('email'), this.get('password'));
-    }
-  },
 
   validations: {
     name: {
