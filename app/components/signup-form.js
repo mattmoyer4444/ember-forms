@@ -46,20 +46,15 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
     } else {
       // response contains id and card, which contains additional card details
       var token = response;
-      this.sendAction('submit', token, this.get('name'), this.get('email'), this.get('password'));
-      //this.sendAction('submit', token);
-
+      this.sendAction('submit', this.get('name'), this.get('email'), this.get('password'), token);
     }
   },
 
 
   actions: {
-
     signup: function () {
-
       if (this.validateForm()) {
         // define card data
-
         Stripe.card.createToken({
           number: this.get('cardNumber'),
           cvc: this.get('cardCVC'),
@@ -106,4 +101,3 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
     }
   }
 });
-
