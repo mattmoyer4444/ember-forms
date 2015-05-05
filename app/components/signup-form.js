@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import jQuery from 'jquery';
 import EmberValidations from 'ember-validations';
 import layout from '../templates/components/signup-form';
 
@@ -9,24 +8,23 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
   cardNumber: '',
   cardExpiry: '',
   cardCVC: '',
+  waiting: false,
 
-  validateForm: function () {
+  formatPaymentInputs: function() {
+    this.$('input[name="cardNumber"]').payment('formatCardNumber');
+    this.$('input[name="cardExpiry"]').payment('formatCardExpiry');
+    this.$('input[name="cardCVC"]').payment('formatCardCVC');
+  }.on('didInsertElement'),
+
+  validateForm: function() {
+    var fields = ['name', 'email', 'password', 'passwordConfirmation', 'cardNumber', 'cardExpiry', 'cardCVC'];
     var firstInvalidField;
 
-    if (this.get('errors.name.firstObject')) {
-      firstInvalidField = 'name';
-    } else if (this.get('errors.email.firstObject')) {
-      firstInvalidField = 'email';
-    } else if (this.get('errors.password.firstObject')) {
-      firstInvalidField = 'password';
-    } else if (this.get('errors.passwordConfirmation.firstObject')) {
-      firstInvalidField = 'passwordConfirmation';
-    } else if (this.get('errors.cardNumber.firstObject')) {
-      firstInvalidField = 'cardNumber';
-    } else if (this.get('errors.cardExpiry.firstObject')) {
-      firstInvalidField = 'cardExpiry';
-    } else if (this.get('errors.cardCVC.firstObject')) {
-      firstInvalidField = 'cardCVC';
+    for (var i = 0; i < fields.length && !firstInvalidField; i++) {
+      var field = fields[i];
+      if (this.get('errors').get(field).get('firstObject')) {
+        firstInvalidField = field;
+      }
     }
 
     if (firstInvalidField) {
@@ -39,29 +37,47 @@ export default Ember.Component.extend(EmberValidations.Mixin, {
     }
   },
 
-  stripeResponseHandler: function (status, response) {
-    if (response.error) {
-      // Show the errors
-      console.log(response.error.message);
-    } else {
-      // response contains id and card, which contains additional card details
-      var token = response;
-      this.sendAction('submit', this.get('name'), this.get('email'), this.get('password'), token);
-    }
+  waitCallback: function (err) {
+    console.log('Error:' + err)
+    this.set('waiting', false);
+
   },
 
+  createStripeToken: function(next) {
+    var number = this.get('cardNumber').replace(/ /g, '');
+    var parsedCardExpiry = Ember.$.payment.cardExpiryVal(this.get('cardExpiry'));
+    var cvc = this.get('cardCVC');
+
+    Stripe.card.createToken({
+      number: number,
+      cvc: cvc,
+      exp_month: parsedCardExpiry.month,
+      exp_year: parsedCardExpiry.year,
+      waiting: true
+
+    }, (status, response) => {
+      if (response.error) {
+        this.set('error', response.error.message);
+        return next();
+      } else {
+
+        return next(response);
+      }
+    });
+  },
 
   actions: {
-    signup: function () {
-      if (this.validateForm()) {
-        // define card data
-        Stripe.card.createToken({
-          number: this.get('cardNumber'),
-          cvc: this.get('cardCVC'),
-          exp_month: jQuery.payment.cardExpiryVal(this.get('cardExpiry'))['month'],
-          exp_year: jQuery.payment.cardExpiryVal(this.get('cardExpiry'))['year']
-        }, this.stripeResponseHandler.bind(this));
+    signup: function() {
+      if (!this.validateForm()) {
+        return;
       }
+
+      this.createStripeToken(token => {
+        if (token) {
+          this.sendAction('submit', this.get('name'),
+            this.get('email'), this.get('password'), token, this.waitCallback(this.error));
+        }
+      });
     }
   },
 

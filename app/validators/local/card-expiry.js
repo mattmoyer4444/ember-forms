@@ -1,14 +1,11 @@
 import Base from 'ember-validations/validators/base';
-import jQuery from 'jquery';
+import Ember from 'ember';
 
 export default Base.extend({
   call: function() {
-
-    var expVal = this.model.get(this.property);
-
-    if (jQuery.payment.validateCardExpiry(jQuery.payment.cardExpiryVal(expVal)) === false) {
-
-      this.errors.pushObject(this.options.message || 'Your credit card expiry date is invalid.');
+    var cardExpiry = Ember.$.payment.cardExpiryVal(this.model.get(this.property));
+    if (!Ember.$.payment.validateCardExpiry(cardExpiry.month, cardExpiry.year)) {
+      this.errors.pushObject(this.options.message || 'Invalid expiration date!');
     }
   }
 });

@@ -26,39 +26,45 @@
 
 {{!-- Credit card information--}}
   {{input type="tel"
-      id="cc-number"
       value=cardNumber
       name="cardNumber"
       autocomplete="cc-number"
       placeholder="Your credit card number"
-      pattern="•••• •••• •••• ••••"
+      pattern="\d*"
       required="required"
       data-nummeric="data-numeric"
   }}
 
   {{input type="tel"
-      id="cc-exp"
       value=cardExpiry
       name="cardExpiry"
       autocomplete="cc-exp"
       placeholder="Your credit card expiration •• / ••"
-      pattern="•• / ••"
+      pattern="\d*"
       required="required"
   }}
 
   {{input type="tel"
-      id="cc-cvc"
       value=cardCVC
       name="cardCVC"
       autocomplete="off"
       placeholder="Your credit card CVC •••"
-      pattern="•••"
+      pattern="\d*"
       required="required"
       data-nummeric="data-numeric"
   }}
 
-  {{input type="submit"
-      value="Sign up"}}
+  {{#if waiting}}
+    <div class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+
+{{else}}
+    {{input type="submit"
+        value="Sign up"}}
+{{/if}}
 
   {{#if error}}
       <div class="error">{{error}}</div>

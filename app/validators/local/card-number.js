@@ -1,11 +1,11 @@
 import Base from 'ember-validations/validators/base';
-import jQuery from 'jquery';
+import Ember from 'ember';
 
 export default Base.extend({
-
   call: function() {
-    if (jQuery.payment.validateCardNumber(this.model.get(this.property)) === false) {
-      this.errors.pushObject(this.options.message || 'Your credit card number is invalid.');
+    var cardNumber = this.model.get(this.property);
+    if (!Ember.$.payment.validateCardNumber(cardNumber)) {
+      this.errors.pushObject(this.options.message || 'Invalid card number!');
     }
   }
 });
